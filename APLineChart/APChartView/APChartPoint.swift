@@ -28,7 +28,7 @@ extension CGFloat {
         return newY
     }
 }
-class APChartPoint {
+public class APChartPoint {
     var dot:CGPoint = CGPoint(x: 0.0, y: 0.0)
     var point:CGPoint = CGPoint(x:0.0, y:0.0)
     var color:UIColor = UIColor.grayColor()
@@ -41,11 +41,11 @@ class APChartPoint {
     var outerRadiusHighlighted: CGFloat = 12
     var innerRadiusHighlighted: CGFloat = 8
     
-    required init(_ dot: CGPoint){
+    required public init(_ dot: CGPoint){
         self.dot = dot
     }
     
-    required init(_ dot: CGPoint, extra:[String:AnyObject!]){
+    required public init(_ dot: CGPoint, extra:[String:AnyObject!]){
         self.dot = dot
         self.extra = extra
     }
@@ -62,17 +62,17 @@ class APChartPoint {
     */
     func drawDot(bgColor:UIColor) -> CALayer{
         
-        var xValue = point.x - outerRadius/2
-        var yValue = point.y - outerRadius/2
+        let xValue = point.x - outerRadius/2
+        let yValue = point.y - outerRadius/2
         
         // draw custom layer with another layer in the center
-        var dotLayer = CALayer()
+        let dotLayer = CALayer()
         dotLayer.backgroundColor = bgColor.CGColor
         dotLayer.cornerRadius = outerRadius / 2
         dotLayer.frame = CGRect(x: xValue, y: yValue, width: outerRadius, height: outerRadius)
         
-        var dotLayerInner = CALayer()
-        var inset = dotLayer.bounds.size.width - innerRadius
+        let dotLayerInner = CALayer()
+        let inset = dotLayer.bounds.size.width - innerRadius
         dotLayerInner.backgroundColor = color.CGColor
         dotLayerInner.cornerRadius = innerRadius / 2
         dotLayerInner.frame = CGRectInset(dotLayer.bounds, inset/2, inset/2)
@@ -81,7 +81,7 @@ class APChartPoint {
         dotLayer.addSublayer(dotLayerInner)
         
         // animate opacity
-        var animation = CABasicAnimation(keyPath: "opacity")
+        let animation = CABasicAnimation(keyPath: "opacity")
         animation.duration = 0.8
         animation.fromValue = 0
         animation.toValue = 1

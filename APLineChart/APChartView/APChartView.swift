@@ -15,7 +15,7 @@ protocol APChartViewDelegate {
 }
 
 
-@IBDesignable class APChartView:UIView,UIScrollViewDelegate{
+@IBDesignable public class APChartView:UIView,UIScrollViewDelegate{
     var collectionLines:[APChartLine] = []
     var collectionMarkers:[APChartMarkerLine] = []
     var delegate: APChartViewDelegate!
@@ -85,7 +85,7 @@ protocol APChartViewDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        var line = APChartLine(chartView: self, title: "mio", lineWidth: 2.0, lineColor: self.colors[1])
+        let line = APChartLine(chartView: self, title: "mio", lineWidth: 2.0, lineColor: self.colors[1])
         line.addPoint( CGPoint(x: 23.0, y: 159.0))
         line.addPoint( CGPoint(x: 34.0, y: 137.0))
         line.addPoint(CGPoint(x: 36.0, y: 160.0))
@@ -101,38 +101,38 @@ protocol APChartViewDelegate {
         self.addLine(line)
         
         
-        var markerX = APChartMarkerLine(chartView: self, title: "x marker", x: 85.0, lineColor: UIColor.redColor() )
+        _ = APChartMarkerLine(chartView: self, title: "x marker", x: 85.0, lineColor: UIColor.redColor() )
         
         self.addMarkerLine("x marker", x: 85.0 )
         self.addMarkerLine("y marker", y: 120.0 )
         self.setNeedsDisplay()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    func addLine(line:APChartLine){
+    public func addLine(line:APChartLine){
         
         collectionLines.append(line)
     }
 
-    func addMarkerLine(title:String, x:CGFloat) {
+    public func addMarkerLine(title:String, x:CGFloat) {
         
-        var line = APChartMarkerLine(chartView: self, title: title, x: x, lineColor: UIColor.redColor())
+        let line = APChartMarkerLine(chartView: self, title: title, x: x, lineColor: UIColor.redColor())
         collectionMarkers.append(line)
     }
     
 
-    func addMarkerLine(title:String, y:CGFloat){
-        var line = APChartMarkerLine(chartView: self, title: title, y: y, lineColor: UIColor.blueColor())
+    public func addMarkerLine(title:String, y:CGFloat){
+        let line = APChartMarkerLine(chartView: self, title: title, y: y, lineColor: UIColor.blueColor())
         collectionMarkers.append(line)
 
     }
     
-    override func drawRect(rect: CGRect) {
+    override public func drawRect(rect: CGRect) {
         if removeAll {
-            var context = UIGraphicsGetCurrentContext()
+            let context = UIGraphicsGetCurrentContext()
             CGContextClearRect(context, rect)
             return
         }
@@ -175,8 +175,6 @@ protocol APChartViewDelegate {
         drawXLabels()
         drawYLabels()
         
-        
-        var layer:CAShapeLayer? = nil
         for  lineData in collectionLines {
             
             lineData.showMeanValue = showMean
@@ -259,11 +257,11 @@ protocol APChartViewDelegate {
     * Draw x grid.
     */
     func drawXGrid() {
-        var height = self.bounds.height
-        var width = self.bounds.width
+        _ = self.bounds.height
+        _ = self.bounds.width
         
-        var space = drawingArea.width / gridLinesX
-        var context = UIGraphicsGetCurrentContext()
+        let space = drawingArea.width / gridLinesX
+        let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, gridColor.CGColor)
         var x:CGFloat = drawingArea.origin.x;
         var step:CGFloat = 0.0
@@ -282,8 +280,8 @@ protocol APChartViewDelegate {
     */
     func drawYGrid() {
         
-        var delta_h = drawingArea.height  / gridLinesY
-        var context = UIGraphicsGetCurrentContext()
+        let delta_h = drawingArea.height  / gridLinesY
+        let context = UIGraphicsGetCurrentContext()
         var y:CGFloat = drawingArea.origin.y
         var step:CGFloat = 0.0
         while step++ < gridLinesY {
@@ -303,10 +301,10 @@ protocol APChartViewDelegate {
         if (!showAxes){
             return
         }
-        var height = self.bounds.height
-        var width = self.bounds.width
+        let height = self.bounds.height
+        _ = self.bounds.width
         
-        var context = UIGraphicsGetCurrentContext()
+        let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         // draw x-axis
         CGContextMoveToPoint(context, drawingArea.origin.x, drawingArea.origin.y)
@@ -326,20 +324,20 @@ protocol APChartViewDelegate {
         CGContextAddLineToPoint(context, drawingArea.origin.x-4.0, marginTop - 5.0 )
         CGContextStrokePath(context)
         
-        var xAxeTitle = UILabel(frame: CGRect(x: pointZero.x, y: height - labelAxesSize.height, width: drawingArea.width, height: labelAxesSize.height))
+        let xAxeTitle = UILabel(frame: CGRect(x: pointZero.x, y: height - labelAxesSize.height, width: drawingArea.width, height: labelAxesSize.height))
         xAxeTitle.font = UIFont.italicSystemFontOfSize(12.0)
         xAxeTitle.textAlignment = .Right
         xAxeTitle.backgroundColor = UIColor.clearColor()
         xAxeTitle.text = titleForX
         self.addSubview(xAxeTitle)
         
-        var yAxeTitle = UILabel(frame: CGRect(x: -labelAxesSize.height, y: pointZero.y, width: drawingArea.height, height:  labelAxesSize.height))
+        let yAxeTitle = UILabel(frame: CGRect(x: -labelAxesSize.height, y: pointZero.y, width: drawingArea.height, height:  labelAxesSize.height))
         yAxeTitle.font = UIFont.italicSystemFontOfSize(12.0)
         yAxeTitle.textAlignment = .Right
         yAxeTitle.text = titleForY
         yAxeTitle.backgroundColor = UIColor.clearColor()
 
-        var yframe = yAxeTitle.frame
+        let yframe = yAxeTitle.frame
         yAxeTitle.layer.anchorPoint = CGPoint(x:(yframe.size.height / yframe.size.width * 0.5), y: -0.5) // Anchor points are in unit space
         yAxeTitle.frame = yframe; // Moving the anchor point moves the layer's position, this is a simple way to re-set
         yAxeTitle.transform = CGAffineTransformMakeRotation(-CGFloat(M_PI)/2)
@@ -352,10 +350,10 @@ protocol APChartViewDelegate {
         if (!showAxes){
             return
         }
-        var height = self.bounds.height
-        var width = self.bounds.width
+        let height = self.bounds.height
+        _ = self.bounds.width
         
-        var context = UIGraphicsGetCurrentContext()
+        let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         // draw x-axis
         CGContextMoveToPoint(context, drawingArea.origin.x, drawingArea.origin.y)
@@ -375,20 +373,20 @@ protocol APChartViewDelegate {
         CGContextAddLineToPoint(context, drawingArea.origin.x-4.0, marginTop - 5.0 )
         CGContextStrokePath(context)
         
-        var xAxeTitle = UILabel(frame: CGRect(x: pointZero.x, y: height - labelAxesSize.height, width: drawingArea.width, height: labelAxesSize.height))
+        let xAxeTitle = UILabel(frame: CGRect(x: pointZero.x, y: height - labelAxesSize.height, width: drawingArea.width, height: labelAxesSize.height))
         xAxeTitle.font = UIFont.italicSystemFontOfSize(12.0)
         xAxeTitle.textAlignment = .Right
         xAxeTitle.backgroundColor = UIColor.clearColor()
         xAxeTitle.text = titleForX
         self.addSubview(xAxeTitle)
         
-        var yAxeTitle = UILabel(frame: CGRect(x: -labelAxesSize.height, y: pointZero.y, width: drawingArea.height, height:  labelAxesSize.height))
+        let yAxeTitle = UILabel(frame: CGRect(x: -labelAxesSize.height, y: pointZero.y, width: drawingArea.height, height:  labelAxesSize.height))
         yAxeTitle.font = UIFont.italicSystemFontOfSize(12.0)
         yAxeTitle.textAlignment = .Right
         yAxeTitle.text = titleForY
         yAxeTitle.backgroundColor = UIColor.clearColor()
        
-        var yframe = yAxeTitle.frame
+        let yframe = yAxeTitle.frame
         yAxeTitle.layer.anchorPoint = CGPoint(x:(yframe.size.height / yframe.size.width * 0.5), y: -0.5) // Anchor points are in unit space
         yAxeTitle.frame = yframe; // Moving the anchor point moves the layer's position, this is a simple way to re-set
         yAxeTitle.transform = CGAffineTransformMakeRotation(-CGFloat(M_PI)/2)
@@ -408,7 +406,7 @@ protocol APChartViewDelegate {
         if collectionLines[0].dots.count == 0 {
             return
         }
-        var p = collectionLines[0].dots[0]
+        let p = collectionLines[0].dots[0]
 
         offsetX = Offset(min:p.dot.x, max:p.dot.x )
         offsetY = Offset(min:p.dot.y, max:p.dot.y )
@@ -421,10 +419,10 @@ protocol APChartViewDelegate {
             }
         }
         
-        var x = offsetX.delta()/10
+        let x = offsetX.delta()/10
         offsetX.min -= x
         offsetX.max += x
-        var y = offsetY.delta()/10
+        let y = offsetY.delta()/10
         offsetY.min -= y
         offsetY.max += y
         
@@ -439,9 +437,9 @@ protocol APChartViewDelegate {
     
     func updateLinesDataStoreScaled() {
         
-        var x_factor = drawingArea.width / ( offsetX.delta()) // - pointZero.x )
-        var y_factor = drawingArea.height /  offsetY.delta()
-        var factorPoint = CGPoint(x: x_factor, y: y_factor)
+        let x_factor = drawingArea.width / ( offsetX.delta()) // - pointZero.x )
+        let y_factor = drawingArea.height /  offsetY.delta()
+        let factorPoint = CGPoint(x: x_factor, y: y_factor)
         
         pointBase = CGPoint(x: pointZero.x-offsetX.min*x_factor , y: pointZero.y+offsetY.min*y_factor)
         for line in collectionLines {
@@ -465,7 +463,7 @@ protocol APChartViewDelegate {
             return
         }
         if (offsetX.min > 0 ){
-            var label = UILabel(frame: CGRect(x: pointZero.x-6.0, y: pointZero.y+12.0, width: pointZero.x-4.0-16.0, height: 16.0))
+            let label = UILabel(frame: CGRect(x: pointZero.x-6.0, y: pointZero.y+12.0, width: pointZero.x-4.0-16.0, height: 16.0))
             label.backgroundColor = UIColor.clearColor()
             label.font = UIFont.boldSystemFontOfSize(10)
             label.textAlignment = NSTextAlignment.Left
@@ -475,14 +473,14 @@ protocol APChartViewDelegate {
             self.addSubview(label)
         }
         
-        var delta = drawingArea.width  / gridLinesX
-        var xValue_delta = offsetX.delta()  / gridLinesX
+        let delta = drawingArea.width  / gridLinesX
+        let xValue_delta = offsetX.delta()  / gridLinesX
         var x:CGFloat = pointZero.x
         var step:CGFloat = 0.0
         while step++ < gridLinesX {
             x += delta
             
-            var label = UILabel(frame: CGRect(x: x-12.0, y: pointZero.y+12.0, width: pointZero.x-4.0-16.0, height: 16.0))
+            let label = UILabel(frame: CGRect(x: x-12.0, y: pointZero.y+12.0, width: pointZero.x-4.0-16.0, height: 16.0))
             label.font = UIFont.boldSystemFontOfSize(10)
             label.textAlignment = NSTextAlignment.Left
             label.transform = CGAffineTransformMakeRotation(CGFloat(M_PI) * 7 / 18)
@@ -503,7 +501,7 @@ protocol APChartViewDelegate {
         }
         
         if (offsetY.min > 0 ) {
-            var label = UILabel(frame: CGRect(x: 18.0, y:  pointZero.y-16.0, width: pointZero.x-4.0-16.0, height: 16.0))
+            let label = UILabel(frame: CGRect(x: 18.0, y:  pointZero.y-16.0, width: pointZero.x-4.0-16.0, height: 16.0))
             label.font = UIFont.systemFontOfSize(10)
             label.textAlignment = NSTextAlignment.Right
             label.text = "\(offsetY.min.round2dec())"
@@ -512,14 +510,14 @@ protocol APChartViewDelegate {
             self.addSubview(label)
         }
         
-        var delta_h = drawingArea.height  / gridLinesY
-        var yValue_delta = offsetY.delta()  / gridLinesY
+        let delta_h = drawingArea.height  / gridLinesY
+        let yValue_delta = offsetY.delta()  / gridLinesY
         var y:CGFloat = pointZero.y
         var step:CGFloat = 0.0
         while step++ < gridLinesY {
             y -= delta_h
             
-            var label = UILabel(frame: CGRect(x: 18.0, y: y-8.0, width: pointZero.x-4.0-16.0, height: 16.0))
+            let label = UILabel(frame: CGRect(x: 18.0, y: y-8.0, width: pointZero.x-4.0-16.0, height: 16.0))
             label.font = UIFont.systemFontOfSize(10)
             label.textAlignment = NSTextAlignment.Right
             label.text = "\((yValue_delta*step+offsetY.min).round2dec())"
@@ -537,7 +535,7 @@ protocol APChartViewDelegate {
         var selectedDot:[String:APChartPoint] = [:]
         for line in collectionLines {
             delta = 5.0
-            for (index,dot) in enumerate(line.dots){
+            for (_,dot) in line.dots.enumerate() {
                 dot.backgroundColor = dotsBackgroundColor
                 
                 diff  =  selectedPoint.distanceXFrom(dot.point)
@@ -548,7 +546,7 @@ protocol APChartViewDelegate {
                 }
             }
         }
-        for (lineTitle, dot) in selectedDot {
+        for (_, dot) in selectedDot {
             dot.backgroundColor = dotsBackgroundColor.lighterColorForColor()
         }
         return selectedDot
@@ -557,13 +555,13 @@ protocol APChartViewDelegate {
     /**
     * Handle touch events.
     */
-    func handleTouchEvents(touches: Set<NSObject>, withEvent event: UIEvent) {
+    func handleTouchEvents(touches: Set<NSObject>, withEvent event: UIEvent?) {
         if (self.collectionLines.isEmpty) { return }
         
-        var point: AnyObject! = touches.first
-        var selectedPoint = point.locationInView(self)
+        let point: AnyObject! = touches.first
+        let selectedPoint = point.locationInView(self)
         
-        var bpath = UIBezierPath()
+        let bpath = UIBezierPath()
         bpath.moveToPoint(CGPoint(x: selectedPoint.x, y: marginTop))
         bpath.addLineToPoint(CGPoint(x: selectedPoint.x, y: pointZero.y))
         selectetedXlayer?.removeFromSuperlayer()
@@ -574,10 +572,11 @@ protocol APChartViewDelegate {
         selectetedXlayer!.strokeColor = UIColor.purpleColor().CGColor //colors[lineIndex].CGColor
         selectetedXlayer!.fillColor = nil
         selectetedXlayer!.lineWidth = 1.0
-        self.layer.addSublayer(selectetedXlayer)
+        self.layer.addSublayer(selectetedXlayer!)
         
         
         if let closestDots = getClosetLineDot(selectedPoint) {
+            
             delegate?.didSelectNearDataPoint(closestDots)
         }
         
@@ -587,14 +586,14 @@ protocol APChartViewDelegate {
     /**
     * Listen on touch end event.
     */
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, withEvent: event)
     }
     
     /**
     * Listen on touch move event
     */
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, withEvent: event)
     }
     
