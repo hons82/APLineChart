@@ -31,6 +31,7 @@ protocol APChartViewDelegate {
     //    @IBInspectable var negativeAreaColor = UIColor(red: 114/255.0, green: 213/255.0, blue: 114/255.0, alpha: 1)
     
     @IBInspectable var showGrid:Bool = false
+    @IBInspectable var showLegend:Bool = false
     @IBInspectable var gridColor = UIColor(red: 238/255.0, green: 238/255.0, blue: 238/255.0, alpha: 1)
     @IBInspectable var gridLinesX: CGFloat = 5.0
     @IBInspectable var gridLinesY: CGFloat = 5.0
@@ -105,6 +106,7 @@ protocol APChartViewDelegate {
         
         self.addMarkerLine("x marker", x: 85.0 )
         self.addMarkerLine("y marker", y: 120.0 )
+        self.contentMode = .Redraw
         self.setNeedsDisplay()
     }
     
@@ -169,6 +171,19 @@ protocol APChartViewDelegate {
             lineMin = APChartMarkerLine(chartView: self, title: "Min", y: offsetY.minValue, lineColor: UIColor.blueColor())
         }
         
+        if showLegend {
+            let legend = APChartLegend()
+            legend.collectionLines = collectionLines
+            legend.backgroundColor = UIColor.clearColor()
+            legend.autoresizingMask = [.FlexibleBottomMargin, .FlexibleBottomMargin]
+            legend.sizeToFit()
+            legend.frame = CGRectMake(bounds.width - legend.frame.size.width,
+                //bounds.height - legend.frame.size.height,
+                60,
+                legend.frame.size.width,
+                legend.frame.size.height)
+            addSubview(legend)
+        }
         
         updateLinesDataStoreScaled()
         
